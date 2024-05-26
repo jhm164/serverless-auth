@@ -1,0 +1,25 @@
+service: fetch-data
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  httpApi:
+    authorizers:
+      customAuthorizer:
+        type: request
+        enableSimpleResponses: true
+        functionName: authorizerFunc
+
+functions:
+  fetchData:
+    handler: index.handler
+    events: 
+      - httpApi:
+          method: get
+          path: /fetch
+          authorizer:
+             name: customAuthorizer
+
+  authorizerFunc:
+     handler: auth.authfunc
